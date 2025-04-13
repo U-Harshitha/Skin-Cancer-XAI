@@ -1,0 +1,19 @@
+.visualization-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 20px;
+  }
+  
+  .explanation-section {
+    text-align: center;
+  }
+  
+  .explanation-visualization {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+  }
+  
