@@ -1,35 +1,38 @@
 import React from 'react';
-import HeatmapVisualization from './HeatmapVisualization';
 
-const PredictionResult = ({ predictions, heatmap }) => {
-    return (
-        <div className="prediction-result">
-            <h2>Prediction Results</h2>
-            <div className="predictions">
-                {predictions.map((pred, index) => (
-                    <div key={index} className="prediction-item">
-                        <span className="class-name">{pred.class}</span>
-                        <div className="probability-bar">
-                            <div 
-                                className="probability-fill"
-                                style={{ width: `${pred.probability * 100}%` }}
-                            />
-                        </div>
-                        <span className="probability-value">
-                            {(pred.probability * 100).toFixed(2)}%
-                        </span>
-                    </div>
-                ))}
-            </div>
-            
-            {heatmap && (
-                <div className="heatmap">
-                    <h3>Model Explanation (Grad-CAM)</h3>
-                    <HeatmapVisualization heatmapData={heatmap} />
-                </div>
-            )}
-        </div>
-    );
-};
+function PredictionResult({ predictions, heatmap, shap }) {
+  return (
+    <div className="result-container">
+      <h2>Prediction Results</h2>
+      <ul>
+        {predictions.map((pred, index) => (
+          <li key={index}>
+            <strong>{pred.class}</strong>: {(pred.probability * 100).toFixed(2)}%
+          </li>
+        ))}
+      </ul>
 
-export default PredictionResult; 
+      
+      {heatmap && (
+        <img 
+          src={`data:image/png;base64,${heatmap}`} 
+          alt="Grad-CAM" 
+          style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '10px' }}
+        />
+      )}
+
+      
+      {shap && (
+        
+        <img 
+          src={`data:image/png;base64,${shap}`} 
+          alt="SHAP" 
+          style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '10px' }}
+        />
+      )}
+   
+    </div>
+  );
+}
+
+export default PredictionResult;

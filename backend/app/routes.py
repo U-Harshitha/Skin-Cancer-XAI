@@ -5,63 +5,74 @@ import tensorflow as tf
 import traceback
 import logging
 
-# Set up logging
+# Setup logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Initialize Flask Blueprint
 api = Blueprint('api', __name__)
+
+# Load model once on startup
 model = SkinCancerModel()
 
 @api.route('/predict', methods=['POST'])
 def predict():
     if 'image' not in request.files:
+        logger.warning("No image part in the request")
         return jsonify({'error': 'No image provided'}), 400
-    
+
+    image_file = request.files['image']
+    logger.debug(f"Image file received: {image_file.filename}")
+
+    if image_file.filename == '':
+        logger.warning("Empty filename submitted")
+        return jsonify({'error': 'No selected file'}), 400
+
     try:
-        image_file = request.files['image']
-        logger.debug(f"Received image file: {image_file.filename}")
-        
-        # Check if the file is empty
-        if image_file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
-            
         image_bytes = image_file.read()
-        logger.debug("Image bytes read successfully")
-        
+        logger.debug("Image bytes read")
+
+        # Check if it's a valid image format
+        if not imghdr.what(None, h=image_bytes):
+            logger.warning("Invalid image format")
+            return jsonify({'error': 'Invalid image format'}), 400
+
         # Preprocess image
         try:
             processed_image = preprocess_image(image_bytes)
-            logger.debug("Image preprocessed successfully")
+            logger.debug("Image preprocessing completed")
         except Exception as e:
-            logger.error(f"Error in preprocessing: {str(e)}")
+            logger.error(f"Image preprocessing failed: {e}")
             return jsonify({'error': f'Error preprocessing image: {str(e)}'}), 500
-        
-        # Get prediction and explanations
+
+        # Predict and generate explanations (Grad-CAM + SHAP)
         try:
             prediction_result = model.predict(processed_image)
-            logger.debug("Prediction generated successfully")
+            logger.debug("Prediction completed")
+
             explanations = generate_explanations(model, processed_image)
-            logger.debug("Explanations generated successfully")
+            logger.debug("Explanations (Grad-CAM & SHAP) generated")
         except Exception as e:
-            logger.error(f"Error in prediction/explanation: {str(e)}")
-            return jsonify({'error': f'Error generating prediction: {str(e)}'}), 500
-        
-        # Combine results
+            logger.error(f"Prediction or explanation error: {e}")
+            return jsonify({'error': f'Prediction/Explanation error: {str(e)}'}), 500
+
+        # Success response
         response = {
             'predictions': prediction_result['predictions'],
             'explanations': {
-                'grad_cam': explanations['grad_cam'],
-                'visualization': explanations['visualization']
+                'grad_cam': explanations.get('grad_cam'),
+                'visualization': explanations.get('visualization'),
+                'saliency': explanations.get('saliency')
+                 # SHAP visual (base64)
             }
         }
-        
-        return jsonify(response)
-    
+        return jsonify(response), 200
+
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
-        logger.error(traceback.format_exc())
+        logger.error(f"Unexpected server error: {e}")
+        logger.debug(traceback.format_exc())
         return jsonify({
-            'error': 'An unexpected error occurred',
+            'error': 'Internal server error',
             'details': str(e),
             'traceback': traceback.format_exc()
-        }), 500 
+        }), 500
