@@ -19,6 +19,27 @@ function App() {
       </header>
       <main className="App-main">
         <ImageUpload onPredictionResult={handlePredictionResult} />
+        
+        <form className="patient-info-form">
+          <h3>Patient Information</h3>
+          <label>
+            Age:
+            <input type="number" name="age" placeholder="Enter age" />
+          </label>
+          <label>
+            Sex:
+            <select name="sex">
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </label>
+          <label>
+            Localization:
+            <input type="text" name="localization" placeholder="e.g., back, face" />
+          </label>
+        </form>
+  
         {result && (
           <>
             <PredictionResult predictions={result.predictions} />
@@ -28,6 +49,7 @@ function App() {
       </main>
     </div>
   );
+  
 }
 
 export default App;
