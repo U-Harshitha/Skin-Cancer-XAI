@@ -4,6 +4,7 @@ from .utils.preprocessing import preprocess_image, generate_explanations
 import tensorflow as tf
 import traceback
 import logging
+import imghdr
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG)
