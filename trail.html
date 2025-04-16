@@ -1,0 +1,15 @@
+<html>
+<body>
+    <h1>hii</h1>
+    <script src="https://js.puter.com/v2/"></script>
+    <script>
+        // Chat with Grok 3 Beta
+        puter.ai.chat(
+            "Explain quantum compjjuting in a witty and engaging way.",
+            {model: 'x-ai/grok-3-beta'}
+        ).then(response => {
+            puter.print(response.message.content);
+        });
+    </script>
+</body>
+</html>

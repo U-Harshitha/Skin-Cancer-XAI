@@ -7,7 +7,7 @@ const HeatmapVisualization = ({ explanations }) => {
       {/* Grad-CAM */}
       {explanations?.visualization && (
         <div className="explanation-section">
-          <h3>Grad-CAM Explanation hlo</h3>
+          <h3>Grad-CAM Explanation</h3>
           <img
             src={`data:image/png;base64,${explanations.visualization}`}
             alt="Grad-CAM Explanation"
@@ -16,7 +16,7 @@ const HeatmapVisualization = ({ explanations }) => {
         </div>
       )}
 
-      {/* SHAP */}
+      {/* SHAP
       {explanations?.shap ? (
   <div className="explanation-section">
     <h3>SHAP Explanation</h3>
@@ -30,7 +30,7 @@ const HeatmapVisualization = ({ explanations }) => {
   <div className="explanation-section">
     <h3>SHAP Explanation not available</h3>
   </div>
-)}
+)} */}
 {explanations?.saliency && (
   <div className="explanation-section">
     <h3>Saliency Map Explanation</h3>

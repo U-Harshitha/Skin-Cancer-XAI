@@ -1,0 +1,50 @@
+.image-upload {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .image-upload input[type="file"] {
+    margin-bottom: 15px;
+  }
+  
+  .preview {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .analyze-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: grey;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    cursor: not-allowed;
+    transition: background-color 0.3s ease;
+  }
+  
+  .analyze-button.active {
+    background-color: #2daceb; /* Green */
+    cursor: pointer;
+  }
+  
+  .analyze-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
