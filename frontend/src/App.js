@@ -4,6 +4,8 @@ import ImageUpload from './components/ImageUpload';
 import PredictionResult from './components/PredictionResult';
 import HeatmapVisualization from './components/HeatmapVisualization';
 import ReactMarkdown from 'react-markdown';
+import CancerType from './components/CancerType';
+
 
 function App() {
   const [result, setResult] = useState(null);
@@ -83,6 +85,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Skin Cancer Detection System</h1>
+        <CancerType predictedTypes={result.predictions || []} />
+
         <p>Upload an image and fill the form for analysis</p>
       </header>
       <main className="App-main">
